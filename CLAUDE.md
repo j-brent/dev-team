@@ -2,6 +2,42 @@
 
 This repository is a multi-agent software development team. The agents are the primary product — they learn and improve by building real projects. Working software is the vehicle for learning; accumulated knowledge is the real output.
 
+> **Session start:** If the user's first message is a greeting or asks what to do, tell them: "Run `/new-project` to start a new project with the Strategic Advisor."
+
+## Quick Orientation
+
+**What this repo is:** 19 AI agents that collaborate to build software. The agents (in `.claude/agents/`) and their accumulated knowledge (in `.claude/learnings/`) are the product. Projects in `projects/` are training exercises.
+
+**Where to find things:**
+- Agent definitions: `.claude/agents/<role>/AGENT.md`
+- Callable skills: `.claude/skills/<name>/SKILL.md`
+- Project-specific docs: `projects/<name>/.dev-team/` (architecture, specs, issues)
+- Project-specific instructions: `projects/<name>/CLAUDE.md`
+
+**Projects are git submodules.** Clone with:
+```sh
+git clone --recurse-submodules https://github.com/j-brent/dev-team.git
+```
+If you already cloned without `--recurse-submodules`:
+```sh
+git submodule update --init --recursive
+```
+
+**Building projects:** Run CMake from within the project directory, not repo root.
+```sh
+cd projects/blackjack
+cmake -B build -S . -G Ninja && cmake --build build
+```
+
+**Git hooks:** Each project has hooks inside its own submodule. Configure once per clone:
+```sh
+git -C projects/blackjack config core.hooksPath .githooks
+```
+
+**The learning system is mandatory.** Before committing non-trivial changes, capture what you learned in `.claude/learnings/`. This is how agents improve.
+
+**Starting a new project?** Run `/new-project` to begin Stage 1 (Ideation) with the Strategic Advisor.
+
 ## Repository Structure
 
 ```
@@ -10,8 +46,8 @@ This repository is a multi-agent software development team. The agents are the p
   skills/           21 callable skills (invoke agents for specific tasks)
   learnings/        Accumulated knowledge (by-language, by-domain, by-tool)
 
-projects/
-  blackjack/        First project — C++ game engine + multiple frontends
+projects/                    (git submodules — clone with --recurse-submodules)
+  blackjack/        https://github.com/j-brent/blackjack
     .dev-team/      Project docs (architecture, specs, issues, coding standards)
     lib/            Pure logic library (no I/O)
     cli/            CLI frontend
@@ -19,6 +55,10 @@ projects/
     web/            Browser frontend (Emscripten/WASM)
     electron/       Desktop frontend (Electron wrapper of web/)
     tests/          Catch2 test suite
+  codeatlas-cpp/    https://github.com/j-brent/codeatlas-cpp
+    src/            Extension source (TypeScript, Node.js)
+    webview/        Webview source (TypeScript, browser)
+    tests/          Vitest test suite
 ```
 
 ## Issue Workflow
@@ -105,3 +145,13 @@ C++20 game engine with a clean state-machine API. Frontends drive the game loop;
 
 See `projects/blackjack/CLAUDE.md` for build instructions and C++ conventions.
 See `projects/blackjack/web/CLAUDE.md` for web frontend specifics.
+
+### CodeAtlas C++ (`projects/codeatlas-cpp/`)
+VS Code extension for visualizing C++ codebases as zoomable semantic graphs. Built with TypeScript, Cytoscape.js, and clangd.
+
+```bash
+cd projects/codeatlas-cpp
+npm install && npm run compile
+```
+
+See `projects/codeatlas-cpp/CLAUDE.md` for development instructions.
