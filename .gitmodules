@@ -1,0 +1,6 @@
+[submodule "projects/blackjack"]
+	path = projects/blackjack
+	url = https://github.com/j-brent/blackjack.git
+[submodule "projects/codeatlas-cpp"]
+	path = projects/codeatlas-cpp
+	url = https://github.com/j-brent/codeatlas-cpp.git
